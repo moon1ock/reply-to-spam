@@ -55,12 +55,8 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         name = sys.argv[1]
     email = 'i.will.waste.your.time.spamming@gmail.com'
-    # email = 'aal544@nyu.edu'
+
 
     if len(sys.argv) > 2:
         email = sys.argv[2]
     response = send(name, to_email=email, subject = 'Re: Business Proposal')
-    if response:
-        print('Decided to respond!')
-    else:
-        print('FAILED TO SEND EMAIL')
