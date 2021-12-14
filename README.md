@@ -1,8 +1,3 @@
-# reply-to-spam
-Bot that will reply to spammers and waste their time
-
-
-
 <h1 align="center">
   <a>Spam the spammers back!</a>
 </h1>
