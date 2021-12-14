@@ -34,7 +34,6 @@ def my_response(my_dict, user_input, sent_tokens):
 	for value in sent_tokens:
 		sent_tokens_.append(sent_tokens[value])
 
-	# tfidf_vec = TfidfVectorizer(tokenizer = lem_normalize, stop_words='english')
 	tfidf_vec = TfidfVectorizer(tokenizer = lem_normalize)
 
 	tfidf = tfidf_vec.fit_transform(sent_tokens_)
@@ -45,20 +44,31 @@ def my_response(my_dict, user_input, sent_tokens):
 	req_tfidf = flat[-2]
 	# print req_tfidf
 
+
 	error_threshold = 0.1
 	if(req_tfidf < error_threshold):
-		robo_response = ["[No Suggestion]"]
-		return robo_response
-
+		if len(my_dict['unsure']['response']):
+			ans = my_dict['unsure']['response'][0]
+			my_dict['unsure']['response'].pop(0)
+			return ans
+		else:
+			return "Text not recognized"
 	else:
 		for value in sent_tokens:
 			match_pattern = sent_tokens_[idx]
 			pattern = sent_tokens[value]
 			if match_pattern == pattern:
-					match_class = value
+				match_class = value
+		if not len(my_dict[match_class]['response']):
+			if len(my_dict['unsure']['response']):
+				ans = my_dict['unsure']['response'][0]
+				my_dict['unsure']['response'].pop(0)
+				return ans
+			else:
+				return "Text not recognized"
+		robo_response = my_dict[match_class]['response'][0]
+		my_dict[match_class]['response'].pop(0)
 
-		# print match_class
-		robo_response = my_dict[match_class]['response']
 		return robo_response
 
 def post_dict(some_dict):
@@ -75,7 +85,7 @@ def post_dict(some_dict):
 
 sent_tokens, word_tokens = post_dict(classes_dict)
 
-print("* Hello! Type in a message and I will suggest some replies! If you'd like to exit please type quit!")
+
 
 flag = True
 
@@ -87,11 +97,10 @@ while flag:
 
 		response = my_response(classes_dict, user_input, sent_tokens)
 
-		for i in range(0, len(response)):
-			print('* ' + response[i])
+		print('* ', response)
 
 		  # sent_tokens.remove(user_input)
-		del sent_tokens['user']
+
 
 	else:
 
